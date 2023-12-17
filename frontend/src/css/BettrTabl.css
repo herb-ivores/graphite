@@ -1,0 +1,3 @@
+.bettr-tabl>tbody>tr>td, .bettr-tabl>tbody>tr>th, .bettr-tabl>tfoot>tr>td, .bettr-tabl>tfoot>tr>th, .bettr-tabl>thead>tr>td, .bettr-tabl>thead>tr>th {
+    padding: 16px;
+}
