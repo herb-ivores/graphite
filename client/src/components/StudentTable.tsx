@@ -7,7 +7,7 @@ interface Props {
 
 function StudentTable({students}: Props) {
     return (
-        <table className="table table-striped bettr-tabl">
+        <table className=" table table-striped bettr-tabl">
             <thead>
             <tr>
                 <th scope="col">Student</th>
@@ -22,7 +22,7 @@ function StudentTable({students}: Props) {
             {students.map(student => (
                 <tr key={student.id}>
                     <td width="40%">{student.lastName}, {student.firstName}</td>
-                    <td width="12%" style={{textAlign: "center"}}>{student.prelim}</td>
+                    <td width="13%" style={{textAlign: "center"}}>{student.prelim}</td>
                     <td width="12%" style={{textAlign: "center"}}>{student.midterm}</td>
                     <td width="12%" style={{textAlign: "center"}}>{student.final}</td>
                     <td width="12%" style={{textAlign: "center"}}>{student.average}</td>
