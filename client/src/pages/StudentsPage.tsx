@@ -4,6 +4,8 @@ import StudentTable from "../components/StudentTable.tsx";
 import {Student} from "../models/Student.ts";
 import {Link} from "react-router-dom";
 import axios from "axios";
+import SearchBar from "../components/SearchBar.tsx";
+
 
 export default function StudentsPage() {
     const [students, setStudents] =
@@ -19,9 +21,15 @@ export default function StudentsPage() {
 
     return (
         <div>
-            <h1>Students</h1>
-            <StudentTable students={students}/>
-            <Link to="/add" className="btn btn-primary">Add Student</Link>
+            <SearchBar></SearchBar>
+            <div className="card rounded-5" style={{margin: '0 14px'}}>
+                <div className="card-body">
+                    <StudentTable students={students}/>
+                    <Link to="/add" className="btn btn-out-dashed btn-primary btn-square w-100">Add Student</Link>
+
+                </div>
+            </div>
+
         </div>
     )
 }
