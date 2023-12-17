@@ -68,7 +68,6 @@ export default function AddStudentPage() {
                             midterm: midterm,
                             final: final,
                         }
-                        console.table(student);
                         axios.post("http://localhost:8081/students", student)
                             .then((response) => {
                                 console.log(response);

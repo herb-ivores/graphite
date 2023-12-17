@@ -21,7 +21,7 @@ export default function StudentsPage() {
         <div>
             <h1>Students</h1>
             <StudentTable students={students}/>
-            <Link to={"/add"} className="btn btn-primary">Add Student</Link>
+            <Link to="/add" className="btn btn-primary">Add Student</Link>
         </div>
     )
 }
