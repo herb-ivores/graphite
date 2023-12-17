@@ -44,7 +44,7 @@ app.post("/students", jsonParser, (request, response) => {
     ]
     connection.execute(query, values, (error: QueryError | null, _: ResultSetHeader) => {
         if (error) return response.json(error)
-        return response.send("Student added successfully!", )
+        return response.send("Student added successfully!")
     })
 })
 
