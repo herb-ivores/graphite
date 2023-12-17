@@ -13,8 +13,8 @@ app.use(jsonParser)
 
 const connection = createConnection({
     host: "localhost",
-    user: "teacher",
-    password: "teacher",
+    user: "root",
+    password: "root",
     database: "student_database",
 })
 
