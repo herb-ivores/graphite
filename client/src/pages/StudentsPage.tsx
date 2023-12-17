@@ -4,7 +4,6 @@ import StudentTable from "../components/StudentTable.tsx";
 import {Student} from "../models/Student.ts";
 import {Link} from "react-router-dom";
 import axios from "axios";
-import SearchBar from "../components/SearchBar.tsx";
 
 
 export default function StudentsPage() {
@@ -21,7 +20,6 @@ export default function StudentsPage() {
 
     return (
         <div>
-            <SearchBar></SearchBar>
             <div className="card rounded-5" style={{margin: '0 14px'}}>
                 <div className="card-body">
                     <StudentTable students={students}/>
