@@ -1,11 +1,36 @@
 import {Student} from "../../models/Student.ts";
-import {Box, Flex, FlexProps, Text} from "@chakra-ui/react";
+import {Box, Flex, FlexProps, ResponsiveValue, Text} from "@chakra-ui/react";
 import StudentRow from "./StudentRow.tsx";
 import { Button } from '@chakra-ui/react'
-
+import{UpDownIcon} from '@chakra-ui/icons'
+import colors from "../../styles/Colors.ts";
 
 interface StudentTableProps extends FlexProps {
     students: Student[]
+}
+
+interface TextWithSortButtonProps{
+    text: string
+    width: ResponsiveValue<string>
+    onClick?: () => void
+}
+
+const TextWithSortButton = ({text, width, onClick}: TextWithSortButtonProps) => {
+    return(
+        <Box width={width} margin={2} fontWeight="semibold" alignItems="center">
+            <Flex>
+                <Text>{text}</Text>
+                <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={onClick}
+                    colorScheme="none"
+                >
+                    <UpDownIcon as="button" color={colors.light.surfaceVariant}/>
+                </Button>
+            </Flex>
+        </Box>
+    );
 }
 
 export default function StudentTable(props: StudentTableProps) {
@@ -14,22 +39,20 @@ export default function StudentTable(props: StudentTableProps) {
         <Flex
             direction="column"
             backgroundColor="#FFFBFE"
-            borderTopStartRadius={24}
+            borderTopStartRadius={20}
             borderTopEndRadius={24}
             borderBottomEndRadius={0}
             borderBottomStartRadius={0}
             {...props}
         >
             <Flex>
-                <Box width={6}/>
-                <Text width="40%" margin={4} fontWeight="semibold">Student</Text>
-                <Text width="12%" margin={4} align="center" fontWeight="semibold">Prelim</Text>
-                <Text width="12%" margin={4} align="center" fontWeight="semibold">Midterm</Text>
-                <Text width="12%" margin={4} align="center" fontWeight="semibold">Final</Text>
-                <Text width="12%" margin={4} align="center" fontWeight="semibold">Average</Text>
-                <Text width="12%" margin={4} align="center" fontWeight="semibold">Status</Text>
-                <Box width={12}/>
-                <Box width={6}/>
+                <Box width={5}/>
+                <TextWithSortButton text="Student" width="40%"/>
+                <TextWithSortButton text="Prelim" width="12%"/>
+                <TextWithSortButton text="Midterm" width="12%"/>
+                <TextWithSortButton text="Final" width="12%"/>
+                <TextWithSortButton text="Average" width="12%"/>
+                <TextWithSortButton text="Status" width="12%"/>
             </Flex>
             <Button colorScheme='purple'
                     variant='ghost'
