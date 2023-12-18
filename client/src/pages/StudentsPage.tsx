@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {parse, StudentJson} from "../models/Json.ts";
-import StudentTable from "../components/StudentTable.tsx";
+import StudentTable from "../components/table/StudentTable.tsx";
 import {Student} from "../models/Student.ts";
 import {Link} from "react-router-dom";
 import axios from "axios";

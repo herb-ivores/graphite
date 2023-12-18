@@ -1,6 +1,8 @@
 import {Student} from "../../models/Student.ts";
 import {Box, Flex, FlexProps, Text} from "@chakra-ui/react";
 import StudentRow from "./StudentRow.tsx";
+import { Button } from '@chakra-ui/react'
+
 
 interface StudentTableProps extends FlexProps {
     students: Student[]
@@ -29,6 +31,16 @@ export default function StudentTable(props: StudentTableProps) {
                 <Box width={12}/>
                 <Box width={6}/>
             </Flex>
+            <Button colorScheme='purple'
+                    variant='ghost'
+                    width='auto'
+                    _hover={{ border: "Color" }}
+                    _focus={{ border: "3px dotted" }}
+                    margin={'10px'}
+                    border={"3px dotted"}
+            >
+                Add Student
+            </Button>
             {students.map((student, index) => (
                 <StudentRow key={student.id} student={student} backgroundColor={index % 2 ? `#FFFFFF00` : `#EADDFF33`}/>
             ))}
