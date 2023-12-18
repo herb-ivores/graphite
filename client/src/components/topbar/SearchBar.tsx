@@ -1,14 +1,25 @@
-import {Input, InputGroup, InputLeftElement} from "@chakra-ui/react";
+import {Input, InputGroup, InputGroupProps, InputLeftElement} from "@chakra-ui/react";
 import {SearchIcon} from "@chakra-ui/icons";
 
-// TODO: Make this accept "Modifier" props :(
-export default function SearchBar() {
+interface SearchBarProps extends InputGroupProps {
+    query: string
+    onQueryChange: (newQuery: string) => void
+}
+
+export default function SearchBar(props: SearchBarProps) {
+    const {query, onQueryChange} = props
     return (
-        <InputGroup size="lg" width="auto">
+        <InputGroup size="lg" width="auto" {...props}>
             <InputLeftElement>
                 <SearchIcon/>
             </InputLeftElement>
-            <Input variant="filled" placeholder="Search" borderRadius="full"/>
+            <Input
+                variant="filled"
+                placeholder="Search"
+                borderRadius="full"
+                value={query}
+                onChange={(newQuery) => onQueryChange(newQuery.target.value)}
+            />
         </InputGroup>
     )
 }
