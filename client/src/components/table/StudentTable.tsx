@@ -4,6 +4,7 @@ import StudentRow from "./StudentRow.tsx";
 import { Button } from '@chakra-ui/react'
 import{UpDownIcon} from '@chakra-ui/icons'
 import colors from "../../styles/Colors.ts";
+import {useState} from "react";
 
 interface StudentTableProps extends FlexProps {
     students: Student[]
@@ -16,8 +17,16 @@ interface TextWithSortButtonProps{
 }
 
 const TextWithSortButton = ({text, width, onClick}: TextWithSortButtonProps) => {
+    const [isHovered, setIsHovered] = useState(false);
     return(
-        <Box width={width} margin={2} fontWeight="semibold" alignItems="center">
+        <Box
+            width={width}
+            margin={2}
+            fontWeight="semibold"
+            alignItems="center"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={()=>setIsHovered(false)}
+        >
             <Flex>
                 <Text>{text}</Text>
                 <Button
@@ -26,7 +35,11 @@ const TextWithSortButton = ({text, width, onClick}: TextWithSortButtonProps) => 
                     onClick={onClick}
                     colorScheme="none"
                 >
-                    <UpDownIcon as="button" color={colors.light.surfaceVariant}/>
+                    <UpDownIcon
+                        visibility={isHovered ? "visible" : "hidden"}
+                        as="button"
+                        color={colors.light.surfaceVariant}
+                    />
                 </Button>
             </Flex>
         </Box>
