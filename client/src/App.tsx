@@ -12,6 +12,6 @@ export default function App() {
         //         <Route path="add" element={<AddStudentPage/>}/>
         //     </Routes>
         // </BrowserRouter>
-        <TopBar/>
+        <TopBar query="" onQueryChange={() => {}}/>
     )
 }

@@ -1,7 +1,7 @@
 import {Input, InputGroup, InputGroupProps, InputLeftElement} from "@chakra-ui/react";
 import {SearchIcon} from "@chakra-ui/icons";
 
-interface SearchBarProps extends InputGroupProps {
+export interface SearchBarProps extends InputGroupProps {
     query: string
     onQueryChange: (newQuery: string) => void
 }
