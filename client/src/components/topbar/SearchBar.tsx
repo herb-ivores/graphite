@@ -19,6 +19,13 @@ export default function SearchBar(props: SearchBarProps) {
                 borderRadius="full"
                 value={query}
                 onChange={(newQuery) => onQueryChange(newQuery.target.value)}
+                backgroundColor="#FFFFFF"
+                _hover={{
+                    backgroundColor: "#FFFFFF"
+                }}
+                _focus={{
+                    backgroundColor: "#FFFFFF"
+                }}
             />
         </InputGroup>
     )

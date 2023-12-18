@@ -2,7 +2,6 @@ import React from 'react'
 import {ChakraProvider, extendTheme} from '@chakra-ui/react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-// import 'bootstrap/dist/css/bootstrap.css'
 
 const theme = extendTheme({
     fonts: {
