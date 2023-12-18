@@ -1,7 +1,7 @@
-import {BoxProps, Flex, Image, Text} from "@chakra-ui/react";
+import {Flex, FlexProps, Image, Text} from "@chakra-ui/react";
 import SearchBar from "./SearchBar.tsx";
 
-interface TopBarProps extends BoxProps {
+interface TopBarProps extends FlexProps {
     query: string
     onQueryChange: (newQuery: string) => void
 }
