@@ -4,19 +4,14 @@ import colors from "../styles/Colors.ts";
 import StudentTable from "../components/table/StudentTable.tsx";
 import {Student} from "../models/Student.ts";
 import {useEffect, useState} from "react";
-import Axios from "axios";
-import {parse, StudentJson} from "../models/Json.ts";
+import {getStudents} from "../data/Database.ts";
 
 export default function StudentsPage() {
     const [students, setStudents] =
         useState<Student[]>([]);
 
     useEffect(() => {
-        Axios.get("http://localhost:8081/students")
-            .then((response) => {
-                const students = response.data.map((studentJson: StudentJson) => parse(studentJson))
-                setStudents(students)
-            })
+        getStudents().then(students => setStudents(students))
     });
 
     return (

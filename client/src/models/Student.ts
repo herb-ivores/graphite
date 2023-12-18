@@ -7,40 +7,41 @@ class Student {
     readonly id?: number
     readonly lastName: string
     readonly firstName: string
-    private readonly _prelim: number
-    private readonly _midterm: number
-    private readonly _final: number
+    readonly _prelim?: number
+    readonly _midterm?: number
+    readonly _final?: number
 
     private get _average() {
-        return (this._prelim + this._midterm + this._final) / 3
+        return this._prelim && this._midterm && this._final ?
+            (this._prelim + this._midterm + this._final) / 3 : undefined
     }
 
     get prelim() {
-        return this._prelim.toFixed(2)
+        return this._prelim?.toFixed(2)
     }
 
     get midterm() {
-        return this._midterm.toFixed(2)
+        return this._midterm?.toFixed(2)
     }
 
     get final() {
-        return this._final.toFixed(2)
+        return this._final?.toFixed(2)
     }
 
     get average() {
-        return this._average.toFixed(2)
+        return this._average?.toFixed(2)
     }
 
     get status() {
-        return this._average >= 75 ? Status.Passed : Status.Failed
+        return this._average ? this._average >= 75 ? Status.Passed : Status.Failed : undefined
     }
 
     constructor(
         lastName: string,
         firstName: string,
-        prelim: number,
-        midterm: number,
-        final: number,
+        prelim?: number,
+        midterm?: number,
+        final?: number,
         id?: number,
     ) {
         this.id = id
