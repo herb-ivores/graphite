@@ -10,16 +10,11 @@ import SortingType from "../components/enum/SortingType.ts";
 
 export default function StudentsPage() {
     const [searchQuery, setSearchQuery] = useState("")
-
-    const [searchQuery, setSearchQuery] = useState("")
     const [sortType, setSortType] = useState<SortingType>(SortingType.Prelim)
     const [sortAscending, setSortAscending] = useState(true)
     const [sortingName, setSortingName] = useState(false)
     const [students, setStudents] =
         useState<Student[]>([]);
-
-    const studentsToShow = students.filter(student =>
-        `${student.lastName}, ${student.firstName}`.toLowerCase().includes(searchQuery.toLowerCase()))
 
     const studentsToShow = useMemo(() => {
         return students.filter(student =>
