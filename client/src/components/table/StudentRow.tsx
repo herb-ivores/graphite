@@ -2,7 +2,7 @@ import {Status, Student} from "../../models/Student.ts";
 import {Badge, Box, Button, Flex, FlexProps, Input, NumberInput, NumberInputField, Text} from "@chakra-ui/react";
 import colors from "../../styles/Colors.ts";
 import {useState} from "react";
-import {CheckIcon} from "@chakra-ui/icons";
+import {AddIcon, CheckIcon} from "@chakra-ui/icons";
 import AlertDialog from "./AlertDialog.tsx";
 
 interface StudentRowContentProps {
@@ -29,20 +29,21 @@ function StudentRowContent({student, isHovered}: StudentRowContentProps) {
         </Flex>
         <Box width={16}>
             {isHovered && (
-                    <AlertDialog studentName={student.firstName}/>
+                <AlertDialog studentName={student.firstName}/>
             )}
         </Box>
     </>;
 }
 
 interface EditableStudentRowContentProps {
-    student: Student,
-    onSave: (student: Student) => void,
+    student?: Student
+    onSave: (student: Student) => void
+    adding?: boolean
 }
 
-function EditableStudentRowContent({student, onSave}: EditableStudentRowContentProps) {
-    const [lastName, setLastName] = useState(student.lastName)
-    const [firstName, setFirstName] = useState(student.firstName)
+export function EditableStudentRowContent({student, onSave, adding}: EditableStudentRowContentProps) {
+    const [lastName, setLastName] = useState(student?.lastName ?? "")
+    const [firstName, setFirstName] = useState(student?.firstName ?? "")
     const [prelim, setPrelim] = useState<number | undefined>(student?._prelim)
     const [midterm, setMidterm] = useState<number | undefined>(student?._midterm)
     const [final, setFinal] = useState<number | undefined>(student?._final)
@@ -122,13 +123,15 @@ function EditableStudentRowContent({student, onSave}: EditableStudentRowContentP
                 ((prelim + midterm + final) / 3).toFixed(2) : undefined}
         </Text>
         <Flex width="12%" margin={4} fontWeight="semibold" alignItems="center" justifyContent="center">
-            <Badge
-                backgroundColor={student.status == Status.Passed ? `#e8fee9` : `#ffe9ed`}
-                color={student.status == Status.Passed ? `#008700` : `#c20007`}
-                alignSelf="center"
-            >
-                {student.status}
-            </Badge>
+            {student !== undefined ? (
+                <Badge
+                    backgroundColor={student.status == Status.Passed ? `#e8fee9` : `#ffe9ed`}
+                    color={student.status == Status.Passed ? `#008700` : `#c20007`}
+                    alignSelf="center"
+                >
+                    {student.status}
+                </Badge>
+            ) : <></>}
         </Flex>
         <Box width={12}>
             <Button variant="ghost" size="sm" onClick={() => {
@@ -142,11 +145,12 @@ function EditableStudentRowContent({student, onSave}: EditableStudentRowContentP
                     hasError = true
                 }
                 if (!hasError) {
-                    const newStudent = new Student(lastName, firstName, prelim, midterm, final, student.id)
+                    const newStudent = new Student(lastName, firstName, prelim, midterm, final, student?.id)
                     onSave(newStudent)
                 }
             }}>
-                <CheckIcon color={colors.light.onPrimaryContainer}/>
+                {adding ? <AddIcon color={colors.light.onPrimaryContainer}/> :
+                    <CheckIcon color={colors.light.onPrimaryContainer}/>}
             </Button>
         </Box>
     </>
@@ -169,7 +173,11 @@ export default function StudentRow(props: StudentRowProps) {
             _hover={{backgroundColor: colors.light.primaryContainer}}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={() => {if (!selected) {onSelect()}}}
+            onClick={() => {
+                if (!selected) {
+                    onSelect()
+                }
+            }}
             as="button"
         >
             <Box width={6}/>

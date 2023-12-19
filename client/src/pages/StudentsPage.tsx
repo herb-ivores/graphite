@@ -3,7 +3,7 @@ import {Flex} from "@chakra-ui/react";
 import colors from "../styles/Colors.ts";
 import StudentTable from "../components/table/StudentTable.tsx";
 import {Student} from "../models/Student.ts";
-import {getStudents, updateStudent} from "../data/Database.ts";
+import {addStudent, getStudents, updateStudent} from "../data/Database.ts";
 import {useEffect, useMemo, useState} from "react";
 import SortingType from "../components/enum/SortingType.ts";
 
@@ -30,6 +30,8 @@ export default function StudentsPage() {
                 }
             });
     }, [searchQuery, students, sortType, sortAscending, sortingName])
+
+    const [addingStudent, setAddingStudent] = useState(false)
 
     const [selectedStudent, setSelectedStudent] =
         useState<Student | undefined>(undefined)
@@ -79,6 +81,12 @@ export default function StudentsPage() {
                 }}
                 flexGrow={1}
                 students={studentsToShow}
+                addingStudent={addingStudent}
+                onAddingStudent={() => setAddingStudent(true)}
+                onAddStudent={student => {
+                    addStudent(student).then(response => console.log(response))
+                    setAddingStudent(false)
+                }}
                 selectedStudent={selectedStudent}
                 onSelectStudent={setSelectedStudent}
                 onUpdateStudent={student => {

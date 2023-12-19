@@ -24,7 +24,7 @@ app.get("/", (_, response) => {
 
 app.get("/students", (_, response) => {
     connection.query(
-        `SELECT * FROM students ORDER BY last_name, first_name`,
+        `SELECT * FROM students ORDER BY first_name, last_name`,
         (error: QueryError, results: RowDataPacket[]) => {
             if (error) return response.json(error)
             return response.json(results)

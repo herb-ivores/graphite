@@ -1,24 +1,27 @@
 import {Student} from "../../models/Student.ts";
 import {Box, Flex, FlexProps, ResponsiveValue, Text} from "@chakra-ui/react";
-import StudentRow from "./StudentRow.tsx";
-import { Button } from '@chakra-ui/react'
-import{UpDownIcon} from '@chakra-ui/icons'
+import StudentRow, {EditableStudentRowContent} from "./StudentRow.tsx";
+import {Button} from '@chakra-ui/react'
+import {UpDownIcon} from '@chakra-ui/icons'
 import colors from "../../styles/Colors.ts";
 import {useState} from "react";
 
 interface StudentTableProps extends FlexProps {
     students: Student[]
-    selectedStudent?: Student,
-    onSelectStudent: (student?: Student) => void,
-    onUpdateStudent: (student: Student) => void,
-    onPrelimSort: () => void,
-    onMidtermSort: () => void,
-    onFinalSort: () => void,
-    onAverageSort: () => void,
-    onNameSort: () => void,
+    addingStudent: boolean
+    onAddingStudent: () => void
+    onAddStudent: (student: Student) => void
+    selectedStudent?: Student
+    onSelectStudent: (student?: Student) => void
+    onUpdateStudent: (student: Student) => void
+    onPrelimSort: () => void
+    onMidtermSort: () => void
+    onFinalSort: () => void
+    onAverageSort: () => void
+    onNameSort: () => void
 }
 
-interface TextWithSortButtonProps{
+interface TextWithSortButtonProps {
     text: string
     width: ResponsiveValue<string>
     onClick?: () => void
@@ -27,14 +30,14 @@ interface TextWithSortButtonProps{
 const TextWithSortButton = ({text, width, onClick}: TextWithSortButtonProps) => {
 
     const [isHovered, setIsHovered] = useState(false);
-    return(
+    return (
         <Box
             width={width}
             margin={2}
             fontWeight="semibold"
             alignItems="center"
             onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={()=>setIsHovered(false)}
+            onMouseLeave={() => setIsHovered(false)}
         >
             <Flex>
                 <Text>{text}</Text>
@@ -58,6 +61,9 @@ const TextWithSortButton = ({text, width, onClick}: TextWithSortButtonProps) => 
 export default function StudentTable(props: StudentTableProps) {
     const {
         students,
+        addingStudent,
+        onAddingStudent,
+        onAddStudent,
         selectedStudent,
         onSelectStudent,
         onUpdateStudent,
@@ -86,16 +92,21 @@ export default function StudentTable(props: StudentTableProps) {
                 <TextWithSortButton text="Average" width="12%" onClick={onAverageSort}/>
                 <Text width="11%" margin={2} fontWeight="semibold" alignItems="center">Status</Text>
             </Flex>
-            <Button colorScheme='purple'
-                    variant='ghost'
-                    width='auto'
-                    _hover={{ border: "Color" }}
-                    _focus={{ border: "3px dotted" }}
-                    margin={'10px'}
-                    border={"3px dotted"}
-            >
-                Add Student
-            </Button>
+            {!addingStudent ? (
+                <Button colorScheme='purple'
+                        variant='ghost'
+                        width='auto'
+                        _hover={{border: "Color"}}
+                        _focus={{border: "3px dotted"}}
+                        margin={'10px'}
+                        border={"3px dotted"}
+                        onClick={onAddingStudent}
+                >Add Student</Button>
+            ) : <Flex alignItems="center" justifyContent="center">
+                <Box width={6}/>
+                <EditableStudentRowContent onSave={student => onAddStudent(student)} adding/>
+                <Box width={6}/>
+            </Flex>}
             {students.map((student, index) => {
                 return (
                     <StudentRow
