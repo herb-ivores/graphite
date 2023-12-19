@@ -14,7 +14,7 @@ interface StudentRowContentProps {
 
 function StudentRowContent({student, isHovered}: StudentRowContentProps) {
     return <>
-        <Text width="40%" margin={4} align="start">{`${student.lastName}, ${student.firstName}`}</Text>
+        <Text width="40%" margin={4} align="start">{`${student.firstName} ${student.lastName}`}</Text>
         <Text width="12%" margin={4} align="center">{student.prelim}</Text>
         <Text width="12%" margin={4} align="center">{student.midterm}</Text>
         <Text width="12%" margin={4} align="center">{student.final}</Text>

@@ -29,7 +29,7 @@ export default function StudentsPage() {
                     return sortAscending ? aValue - bValue : bValue - aValue;
                 }
             });
-    }, [searchQuery, students, sortType,sortAscending, sortingName])
+    }, [searchQuery, students, sortType, sortAscending, sortingName])
 
     const [selectedStudent, setSelectedStudent] =
         useState<Student | undefined>(undefined)
@@ -55,26 +55,26 @@ export default function StudentsPage() {
                 onQueryChange={setSearchQuery}
             />
             <StudentTable
-                onPrelimSort={()=> {
+                onPrelimSort={() => {
                     setSortingName(false)
                     setSortAscending(!sortAscending)
                     setSortType(SortingType.Prelim)
                 }}
-                onMidtermSort={()=> {
+                onMidtermSort={() => {
                     setSortAscending(!sortAscending)
                     setSortType(SortingType.Midterm)
                 }}
-                onFinalSort={()=>{
+                onFinalSort={() => {
                     setSortingName(false)
                     setSortAscending(!sortAscending)
                     setSortType(SortingType.Final)
                 }}
-                onAverageSort={()=>{
+                onAverageSort={() => {
                     setSortingName(false)
                     setSortAscending(!sortAscending)
                     setSortType(SortingType.Average)
                 }}
-                onNameSort={()=>{
+                onNameSort={() => {
                     setSortingName(!sortingName)
                 }}
                 flexGrow={1}
