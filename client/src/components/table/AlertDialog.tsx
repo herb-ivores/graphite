@@ -25,7 +25,11 @@ function DeleteAlertDialog({studentName}: DeleteDialogProps) {
     // }
     return (
         <>
-            <Button variant="ghost" size="sm" onClick={onOpen}>
+            <Button variant="ghost" size="sm" onClick={(event) => {
+                onOpen()
+                event.stopPropagation()
+
+            }}>
                 <DeleteIcon color={colors.light.onPrimaryContainer}/>
             </Button>
 

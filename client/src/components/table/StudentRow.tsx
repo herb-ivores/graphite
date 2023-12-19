@@ -2,7 +2,8 @@ import {Status, Student} from "../../models/Student.ts";
 import {Badge, Box, Button, Flex, FlexProps, Input, NumberInput, NumberInputField, Text} from "@chakra-ui/react";
 import colors from "../../styles/Colors.ts";
 import {useState} from "react";
-import {CheckIcon, DeleteIcon} from "@chakra-ui/icons";
+import {CheckIcon} from "@chakra-ui/icons";
+import AlertDialog from "./AlertDialog.tsx";
 
 // TODO: Fix all grade ? grade : undefined
 
@@ -26,12 +27,11 @@ function StudentRowContent({student, isHovered}: StudentRowContentProps) {
             >
                 {student.status}
             </Badge>
+
         </Flex>
-        <Box width={12}>
+        <Box width={16}>
             {isHovered && (
-                <Button variant="ghost" size="sm">
-                    <DeleteIcon color={colors.light.onPrimaryContainer}/>
-                </Button>
+                    <AlertDialog studentName={student.firstName}/>
             )}
         </Box>
     </>;
