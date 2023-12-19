@@ -10,6 +10,9 @@ export default function StudentsPage() {
     const [students, setStudents] =
         useState<Student[]>([]);
 
+    const [selectedStudent, setSelectedStudent] =
+        useState<Student | undefined>(undefined)
+
     useEffect(() => {
         getStudents().then(students => setStudents(students))
     });
@@ -31,6 +34,8 @@ export default function StudentsPage() {
             <StudentTable
                 flexGrow={1}
                 students={students}
+                selectedStudent={selectedStudent}
+                onSelectStudent={setSelectedStudent}
             />
         </Flex>
     )

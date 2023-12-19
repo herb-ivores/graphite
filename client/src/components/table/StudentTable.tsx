@@ -1,15 +1,16 @@
 import {Student} from "../../models/Student.ts";
-import {Box, Flex, FlexProps, Text} from "@chakra-ui/react";
+import {Box, Button, Flex, FlexProps, Text} from "@chakra-ui/react";
 import StudentRow from "./StudentRow.tsx";
-import { Button } from '@chakra-ui/react'
 
 
 interface StudentTableProps extends FlexProps {
-    students: Student[]
+    students: Student[],
+    selectedStudent?: Student,
+    onSelectStudent: (student?: Student) => void,
 }
 
 export default function StudentTable(props: StudentTableProps) {
-    const {students} = props
+    const {students, selectedStudent, onSelectStudent} = props
     return (
         <Flex
             direction="column"
@@ -34,16 +35,23 @@ export default function StudentTable(props: StudentTableProps) {
             <Button colorScheme='purple'
                     variant='ghost'
                     width='auto'
-                    _hover={{ border: "Color" }}
-                    _focus={{ border: "3px dotted" }}
+                    _hover={{border: "Color"}}
+                    _focus={{border: "3px dotted"}}
                     margin={'10px'}
                     border={"3px dotted"}
             >
                 Add Student
             </Button>
-            {students.map((student, index) => (
-                <StudentRow key={student.id} student={student} backgroundColor={index % 2 ? `#FFFFFF00` : `#EADDFF33`}/>
-            ))}
+            {students.map((student, index) => {
+                return (
+                    <StudentRow
+                        key={student.id}
+                        student={student}
+                        selected={student.id == selectedStudent?.id}
+                        onSelect={() => onSelectStudent(student)}
+                        backgroundColor={index % 2 ? `#FFFFFF00` : `#EADDFF33`}
+                    />)
+            })}
         </Flex>
     )
 }
