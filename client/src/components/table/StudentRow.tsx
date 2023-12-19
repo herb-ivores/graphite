@@ -1,8 +1,9 @@
 import {Status, Student} from "../../models/Student.ts";
-import {Badge, Box, Button, Flex, FlexProps, Text} from "@chakra-ui/react";
+import {Badge, Box, Flex, FlexProps, Text} from "@chakra-ui/react";
 import colors from "../../styles/Colors.ts";
-import {useState} from "react";
-import {DeleteIcon} from "@chakra-ui/icons";
+import  {useState} from "react";
+import AlertDialog from "./AlertDialog.tsx";
+
 
 interface StudentRowProps extends FlexProps {
     student: Student
@@ -11,6 +12,7 @@ interface StudentRowProps extends FlexProps {
 export default function StudentRow(props: StudentRowProps) {
     const {student} = props
     const [isHovered, setIsHovered] = useState(false);
+
     return (
         <Flex {...props} alignItems="center"
               _hover={{backgroundColor: colors.light.primaryContainer}}
@@ -35,12 +37,10 @@ export default function StudentRow(props: StudentRowProps) {
             </Flex>
             <Box width={12}>
                 {isHovered && (
-                    <Button variant="ghost" size="sm">
-                        <DeleteIcon color={colors.light.onPrimaryContainer}/>
-                    </Button>
+                   <AlertDialog studentName={student.firstName}/>
                 )}
-            </Box>
 
+            </Box>
             <Box width={6}/>
         </Flex>
     )
