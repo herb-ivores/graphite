@@ -1,11 +1,11 @@
 import Express from "express"
-import {createConnection, QueryError, ResultSetHeader, RowDataPacket} from "mysql2"
+import {createConnection, QueryError, RowDataPacket} from "mysql2"
 import Cors from "cors"
 import bodyParser from "body-parser";
 import {StudentJson} from "./Json";
 
 const jsonParser = bodyParser.json();
-// const urlencodedParser = bodyParser.urlencoded({extended: false});
+const urlencodedParser = bodyParser.urlencoded({extended: false});
 
 const app = Express()
 app.use(Cors())
@@ -14,6 +14,7 @@ app.use(jsonParser)
 const connection = createConnection({
     host: "localhost",
     user: "root",
+    password: "root",
     database: "student_database",
 })
 
@@ -23,7 +24,7 @@ app.get("/", (_, response) => {
 
 app.get("/students", (_, response) => {
     connection.query(
-        `SELECT * FROM students`,
+        `SELECT * FROM students ORDER BY last_name, first_name`,
         (error: QueryError, results: RowDataPacket[]) => {
             if (error) return response.json(error)
             return response.json(results)
@@ -31,19 +32,44 @@ app.get("/students", (_, response) => {
     );
 })
 
-app.post("/students", jsonParser, (request, response) => {
+app.post("/students/add", jsonParser, (request, response) => {
     const query = `INSERT INTO students (last_name, first_name, prelim, midterm, final) VALUES(?, ?, ?, ?, ?)`
     const body: StudentJson = request.body
     const values = [
         body.last_name,
         body.first_name,
-        body.prelim,
-        body.midterm,
-        body.final,
+        body.prelim ? body.prelim : null,
+        body.midterm ? body.midterm : null,
+        body.final ? body.final : null,
     ]
-    connection.execute(query, values, (error: QueryError | null, _: ResultSetHeader) => {
+    connection.execute(query, values, (error, _) => {
         if (error) return response.json(error)
         return response.send("Student added successfully!")
+    })
+})
+
+app.post("/students/update", jsonParser, (request, response) => {
+    const query = `UPDATE students SET last_name = ?, first_name = ?, prelim = ?, midterm = ?, final = ? WHERE id = ?`
+    const body = request.body
+    const values = [
+        body.last_name,
+        body.first_name,
+        body.prelim ? body.prelim : null,
+        body.midterm ? body.midterm : null,
+        body.final ? body.final : null,
+    ]
+    connection.execute(query, values, (error, _) => {
+        if (error) return response.json(error)
+        return response.send("Student updated successfully!")
+    })
+})
+
+app.post("/students/delete/:id", urlencodedParser, (request, response) => {
+    const id = request.params.id
+    const query = `DELETE FROM students WHERE id = ?`
+    connection.execute(query, [id], (error, _) => {
+        if (error) return response.json(error)
+        return response.send("Student deleted successfully!")
     })
 })
 

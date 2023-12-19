@@ -1,33 +1,42 @@
-import {useEffect, useState} from "react";
-import {parse, StudentJson} from "../models/Json.ts";
+import TopBar from "../components/topbar/TopBar.tsx";
+import {Flex} from "@chakra-ui/react";
+import colors from "../styles/Colors.ts";
 import StudentTable from "../components/table/StudentTable.tsx";
 import {Student} from "../models/Student.ts";
-import {Link} from "react-router-dom";
-import axios from "axios";
-
+import {useEffect, useState} from "react";
+import {getStudents} from "../data/Database.ts";
 
 export default function StudentsPage() {
     const [students, setStudents] =
         useState<Student[]>([]);
 
+    const [selectedStudent, setSelectedStudent] =
+        useState<Student | undefined>(undefined)
+
     useEffect(() => {
-        axios.get("http://localhost:8081/students")
-            .then((response) => {
-                const students = response.data.map((studentJson: StudentJson) => parse(studentJson))
-                setStudents(students)
-            })
+        getStudents().then(students => setStudents(students))
     });
 
     return (
-        <div>
-            <div className="card rounded-5" style={{margin: '0 14px'}}>
-                <div className="card-body">
-                    <StudentTable students={students}/>
-                    <Link to="/add" className="btn btn-out-dashed btn-primary btn-square w-100">Add Student</Link>
-
-                </div>
-            </div>
-
-        </div>
+        <Flex
+            direction="column"
+            paddingStart={4}
+            paddingTop={4}
+            paddingEnd={4}
+            paddingBottom={0}
+            width="100%"
+            height="calc(100vh)"
+            gap={4}
+            background={colors.light.surfaceVariant}
+        >
+            <TopBar query="" onQueryChange={() => {
+            }}/>
+            <StudentTable
+                flexGrow={1}
+                students={students}
+                selectedStudent={selectedStudent}
+                onSelectStudent={setSelectedStudent}
+            />
+        </Flex>
     )
 }

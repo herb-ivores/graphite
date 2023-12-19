@@ -1,16 +1,17 @@
 import {useState} from "react";
-import axios from "axios";
 import parseString from "../extensions/ParseString.ts";
 import {useNavigate} from "react-router-dom";
+import {Student} from "../models/Student.ts";
+import {addStudent} from "../data/Database.ts";
 
 export default function AddStudentPage() {
     const navigate = useNavigate();
 
     const [lastName, setLastName] = useState("");
     const [firstName, setFirstName] = useState("");
-    const [prelim, setPrelim] = useState(0);
-    const [midterm, setMidterm] = useState(0);
-    const [final, setFinal] = useState(0);
+    const [prelim, setPrelim] = useState<number | undefined>(undefined);
+    const [midterm, setMidterm] = useState<number | undefined>(undefined);
+    const [final, setFinal] = useState<number | undefined>(undefined);
 
     return (
         <div>
@@ -38,7 +39,7 @@ export default function AddStudentPage() {
                 <input type="number"
                        className="form-control"
                        id="prelim"
-                       value={parseString(prelim)}
+                       value={prelim ? parseString(prelim) : ""}
                        onChange={(newPrelim) =>
                            setPrelim(parseInt(newPrelim.target.value))}/>
             </div>
@@ -46,7 +47,7 @@ export default function AddStudentPage() {
                 <label htmlFor="midterm" className="form-label">Midterm</label>
                 <input type="number"
                        className="form-control" id="midterm"
-                       value={parseString(midterm)}
+                       value={midterm ? parseString(midterm) : ""}
                        onChange={(newMidterm) =>
                            setMidterm(parseInt(newMidterm.target.value))}/>
             </div>
@@ -55,23 +56,14 @@ export default function AddStudentPage() {
                 <input type="number"
                        className="form-control"
                        id="final"
-                       value={parseString(final)}
+                       value={final ? parseString(final) : ""}
                        onChange={(newFinal) =>
                            setFinal(parseInt(newFinal.target.value))}/>
             </div>
             <button className="btn btn-primary"
                     onClick={() => {
-                        const student = {
-                            last_name: lastName,
-                            first_name: firstName,
-                            prelim: prelim,
-                            midterm: midterm,
-                            final: final,
-                        }
-                        axios.post("http://localhost:8081/students", student)
-                            .then((response) => {
-                                console.log(response);
-                            })
+                        const student = new Student(lastName, firstName, prelim, midterm, final)
+                        addStudent(student).then(response => console.log(response))
                         navigate("..")
                     }}>
                 Add Student
