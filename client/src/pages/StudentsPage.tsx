@@ -4,7 +4,7 @@ import colors from "../styles/Colors.ts";
 import StudentTable from "../components/table/StudentTable.tsx";
 import {Student} from "../models/Student.ts";
 import {useEffect, useState} from "react";
-import {getStudents} from "../data/Database.ts";
+import {getStudents, updateStudent} from "../data/Database.ts";
 
 export default function StudentsPage() {
     const [searchQuery, setSearchQuery] = useState("")
@@ -43,6 +43,10 @@ export default function StudentsPage() {
                 students={studentsToShow}
                 selectedStudent={selectedStudent}
                 onSelectStudent={setSelectedStudent}
+                onUpdateStudent={student => {
+                    updateStudent(student).then(response => console.log(response))
+                    setSelectedStudent(undefined)
+                }}
             />
         </Flex>
     )

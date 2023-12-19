@@ -12,24 +12,24 @@ class Student {
     readonly _final?: number
 
     private get _average() {
-        return this._prelim && this._midterm && this._final ?
+        return this._prelim !== undefined && this._midterm !== undefined && this._final !== undefined ?
             (this._prelim + this._midterm + this._final) / 3 : undefined
     }
 
     get prelim() {
-        return this._prelim?.toFixed(2)
+        return this._prelim?.toFixed(2) ?? "-"
     }
 
     get midterm() {
-        return this._midterm?.toFixed(2)
+        return this._midterm?.toFixed(2) ?? "-"
     }
 
     get final() {
-        return this._final?.toFixed(2)
+        return this._final?.toFixed(2) ?? "-"
     }
 
     get average() {
-        return this._average?.toFixed(2)
+        return this._average?.toFixed(2) ?? "-"
     }
 
     get status() {

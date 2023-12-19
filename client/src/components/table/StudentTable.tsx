@@ -7,10 +7,11 @@ interface StudentTableProps extends FlexProps {
     students: Student[],
     selectedStudent?: Student,
     onSelectStudent: (student?: Student) => void,
+    onUpdateStudent: (student: Student) => void,
 }
 
 export default function StudentTable(props: StudentTableProps) {
-    const {students, selectedStudent, onSelectStudent} = props
+    const {students, selectedStudent, onSelectStudent, onUpdateStudent} = props
     return (
         <Flex
             direction="column"
@@ -49,6 +50,7 @@ export default function StudentTable(props: StudentTableProps) {
                         student={student}
                         selected={student.id == selectedStudent?.id}
                         onSelect={() => onSelectStudent(student)}
+                        onUpdateStudent={student => onUpdateStudent(student)}
                         backgroundColor={index % 2 ? `#FFFFFF00` : `#EADDFF33`}
                     />)
             })}

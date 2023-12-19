@@ -57,6 +57,7 @@ app.post("/students/update", jsonParser, (request, response) => {
         body.prelim ? body.prelim : null,
         body.midterm ? body.midterm : null,
         body.final ? body.final : null,
+        body.id,
     ]
     connection.execute(query, values, (error, _) => {
         if (error) return response.json(error)
