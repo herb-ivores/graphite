@@ -7,8 +7,13 @@ import {useEffect, useState} from "react";
 import {getStudents} from "../data/Database.ts";
 
 export default function StudentsPage() {
+    const [searchQuery, setSearchQuery] = useState("")
+
     const [students, setStudents] =
         useState<Student[]>([]);
+
+    const studentsToShow = students.filter(student =>
+        `${student.lastName}, ${student.firstName}`.toLowerCase().includes(searchQuery.toLowerCase()))
 
     const [selectedStudent, setSelectedStudent] =
         useState<Student | undefined>(undefined)
@@ -29,11 +34,13 @@ export default function StudentsPage() {
             gap={4}
             background={colors.light.surfaceVariant}
         >
-            <TopBar query="" onQueryChange={() => {
-            }}/>
+            <TopBar
+                query={searchQuery}
+                onQueryChange={setSearchQuery}
+            />
             <StudentTable
                 flexGrow={1}
-                students={students}
+                students={studentsToShow}
                 selectedStudent={selectedStudent}
                 onSelectStudent={setSelectedStudent}
             />
