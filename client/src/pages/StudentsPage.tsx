@@ -35,7 +35,7 @@ export default function StudentsPage() {
             background={colors.light.surfaceVariant}
         >
             <TopBar
-                query={selectedStudent?.lastName ?? ""}
+                query={searchQuery}
                 onQueryChange={setSearchQuery}
             />
             <StudentTable
