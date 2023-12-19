@@ -8,6 +8,8 @@ import {useState} from "react";
 
 interface StudentTableProps extends FlexProps {
     students: Student[]
+    selectedStudent?: Student,
+    onSelectStudent: (student?: Student) => void,
 }
 
 interface TextWithSortButtonProps{
@@ -17,6 +19,7 @@ interface TextWithSortButtonProps{
 }
 
 const TextWithSortButton = ({text, width, onClick}: TextWithSortButtonProps) => {
+
     const [isHovered, setIsHovered] = useState(false);
     return(
         <Box
@@ -47,7 +50,7 @@ const TextWithSortButton = ({text, width, onClick}: TextWithSortButtonProps) => 
 }
 
 export default function StudentTable(props: StudentTableProps) {
-    const {students} = props
+    const {students, selectedStudent, onSelectStudent} = props
     return (
         <Flex
             direction="column"
@@ -77,9 +80,16 @@ export default function StudentTable(props: StudentTableProps) {
             >
                 Add Student
             </Button>
-            {students.map((student, index) => (
-                <StudentRow key={student.id} student={student} backgroundColor={index % 2 ? `#FFFFFF00` : `#EADDFF33`}/>
-            ))}
+            {students.map((student, index) => {
+                return (
+                    <StudentRow
+                        key={student.id}
+                        student={student}
+                        selected={student.id == selectedStudent?.id}
+                        onSelect={() => onSelectStudent(student)}
+                        backgroundColor={index % 2 ? `#FFFFFF00` : `#EADDFF33`}
+                    />)
+            })}
         </Flex>
     )
 }
