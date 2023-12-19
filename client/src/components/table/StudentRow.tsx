@@ -5,8 +5,6 @@ import {useState} from "react";
 import {CheckIcon} from "@chakra-ui/icons";
 import AlertDialog from "./AlertDialog.tsx";
 
-// TODO: Fix all grade ? grade : undefined
-
 interface StudentRowContentProps {
     student: Student,
     isHovered: boolean,
