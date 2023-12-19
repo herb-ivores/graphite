@@ -10,6 +10,11 @@ interface StudentTableProps extends FlexProps {
     students: Student[]
     selectedStudent?: Student,
     onSelectStudent: (student?: Student) => void,
+    onPrelimSort: () => void,
+    onMidtermSort: () => void,
+    onFinalSort: () => void,
+    onAverageSort: () => void,
+    onNameSort: () => void,
 }
 
 interface TextWithSortButtonProps{
@@ -41,7 +46,7 @@ const TextWithSortButton = ({text, width, onClick}: TextWithSortButtonProps) => 
                     <UpDownIcon
                         visibility={isHovered ? "visible" : "hidden"}
                         as="button"
-                        color={colors.light.surfaceVariant}
+                        color={colors.light.onSurface}
                     />
                 </Button>
             </Flex>
@@ -50,7 +55,16 @@ const TextWithSortButton = ({text, width, onClick}: TextWithSortButtonProps) => 
 }
 
 export default function StudentTable(props: StudentTableProps) {
-    const {students, selectedStudent, onSelectStudent} = props
+    const {
+        students,
+        selectedStudent,
+        onSelectStudent,
+        onPrelimSort,
+        onMidtermSort,
+        onFinalSort,
+        onAverageSort,
+        onNameSort,
+    } = props
     return (
         <Flex
             direction="column"
@@ -63,12 +77,12 @@ export default function StudentTable(props: StudentTableProps) {
         >
             <Flex>
                 <Box width={5}/>
-                <TextWithSortButton text="Student" width="40%"/>
-                <TextWithSortButton text="Prelim" width="12%"/>
-                <TextWithSortButton text="Midterm" width="12%"/>
-                <TextWithSortButton text="Final" width="12%"/>
-                <TextWithSortButton text="Average" width="12%"/>
-                <TextWithSortButton text="Status" width="12%"/>
+                <TextWithSortButton text="Student" width="40%" onClick={onNameSort}/>
+                <TextWithSortButton text="Prelim" width="12%" onClick={onPrelimSort}/>
+                <TextWithSortButton text="Midterm" width="12%" onClick={onMidtermSort}/>
+                <TextWithSortButton text="Final" width="12%" onClick={onFinalSort}/>
+                <TextWithSortButton text="Average" width="12%" onClick={onAverageSort}/>
+                <Text width="11%" margin={2} fontWeight="semibold" alignItems="center">Status</Text>
             </Flex>
             <Button colorScheme='purple'
                     variant='ghost'

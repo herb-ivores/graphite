@@ -3,7 +3,7 @@ import {Badge, Box, Button, Flex, FlexProps, Input, Text} from "@chakra-ui/react
 import colors from "../../styles/Colors.ts";
 import AlertDialog from "./AlertDialog.tsx";
 import {useState} from "react";
-import {CheckIcon, DeleteIcon} from "@chakra-ui/icons";
+import {CheckIcon} from "@chakra-ui/icons";
 
 // TODO: Fix all grade ? grade : undefined
 
@@ -33,29 +33,9 @@ export default function StudentRow(props: StudentRowProps) {
             onClick={onSelect}
             as="button"
         >
-            <Box width={6}/>
-            <Text width="40%" margin={4}>{`${student.lastName}, ${student.firstName}`}</Text>
-            <Text width="12%" margin={4} align="center">{student.prelim}</Text>
-            <Text width="12%" margin={4} align="center">{student.midterm}</Text>
-            <Text width="12%" margin={4} align="center">{student.final}</Text>
-            <Text width="12%" margin={4} align="center">{student.average}</Text>
-            <Flex width="12%" margin={4} fontWeight="semibold" alignItems="center" justifyContent="center">
-                <Badge
-                    backgroundColor={student.status == Status.Passed ? `#e8fee9` : `#ffe9ed`}
-                    color={student.status == Status.Passed ? `#008700` : `#c20007`}
-                    alignSelf="center"
-                >
-                    {student.status}
-                </Badge>
-            </Flex>
-            <Box width={12}>
-                {isHovered && (
-                   <AlertDialog studentName={student.firstName}/>
-                )}
 
-            </Box>
             {!selected ? <>
-                <Text width="40%" margin={4} align="start">{`${student.lastName}, ${student.firstName}`}</Text>
+                <Text width="40%" margin={4} align="start">{`${student.firstName}, ${student.lastName}`}</Text>
                 <Text width="12%" margin={4} align="center">{student.prelim}</Text>
                 <Text width="12%" margin={4} align="center">{student.midterm}</Text>
                 <Text width="12%" margin={4} align="center">{student.final}</Text>
@@ -69,13 +49,6 @@ export default function StudentRow(props: StudentRowProps) {
                         {student.status}
                     </Badge>
                 </Flex>
-                <Box width={12}>
-                    {isHovered && (
-                        <Button variant="ghost" size="sm">
-                            <DeleteIcon color={colors.light.onPrimaryContainer}/>
-                        </Button>
-                    )}
-                </Box>
             </> : <>
                 {/*TODO: Add first name*/}
                 <Input
@@ -125,7 +98,11 @@ export default function StudentRow(props: StudentRowProps) {
                     </Button>
                 </Box>
             </>}
-            <Box width={6}/>
+            <Box width={12}>
+                {isHovered && (
+                    <AlertDialog studentName={student.firstName}/>
+                )}
+            </Box>
         </Flex>
     )
 
