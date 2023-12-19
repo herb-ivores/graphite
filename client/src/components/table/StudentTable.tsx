@@ -2,7 +2,7 @@ import {Student} from "../../models/Student.ts";
 import {Box, Flex, FlexProps, ResponsiveValue, Text} from "@chakra-ui/react";
 import StudentRow from "./StudentRow.tsx";
 import { Button } from '@chakra-ui/react'
-import{UpDownIcon} from '@chakra-ui/icons'
+import{UpDownIcon, HamburgerIcon} from '@chakra-ui/icons'
 import colors from "../../styles/Colors.ts";
 import {useState} from "react";
 
@@ -21,10 +21,11 @@ interface StudentTableProps extends FlexProps {
 interface TextWithSortButtonProps{
     text: string
     width: ResponsiveValue<string>
-    onClick?: () => void
+    onSort?: () => void
+    onFind?: () => void
 }
 
-const TextWithSortButton = ({text, width, onClick}: TextWithSortButtonProps) => {
+const TextWithSortButton = ({text, width, onSort, onFind}: TextWithSortButtonProps) => {
 
     const [isHovered, setIsHovered] = useState(false);
     return(
@@ -41,7 +42,7 @@ const TextWithSortButton = ({text, width, onClick}: TextWithSortButtonProps) => 
                 <Button
                     size="sm"
                     variant="ghost"
-                    onClick={onClick}
+                    onClick={onSort}
                     colorScheme="none"
                 >
                     <UpDownIcon
@@ -50,6 +51,15 @@ const TextWithSortButton = ({text, width, onClick}: TextWithSortButtonProps) => 
                         color={colors.light.onSurface}
                     />
                 </Button>
+                <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={onFind}
+                    colorScheme="none"
+                >
+                    <HamburgerIcon  visibility={isHovered ? "visible" : "hidden"} as="button"/>
+                </Button>
+
             </Flex>
         </Box>
     );
@@ -79,11 +89,11 @@ export default function StudentTable(props: StudentTableProps) {
         >
             <Flex>
                 <Box width={5}/>
-                <TextWithSortButton text="Student" width="40%" onClick={onNameSort}/>
-                <TextWithSortButton text="Prelim" width="12%" onClick={onPrelimSort}/>
-                <TextWithSortButton text="Midterm" width="12%" onClick={onMidtermSort}/>
-                <TextWithSortButton text="Final" width="12%" onClick={onFinalSort}/>
-                <TextWithSortButton text="Average" width="12%" onClick={onAverageSort}/>
+                <TextWithSortButton text="Student" width="40%" onSort={onNameSort} />
+                <TextWithSortButton text="Prelim" width="12%" onSort={onPrelimSort}/>
+                <TextWithSortButton text="Midterm" width="12%" onSort={onMidtermSort}/>
+                <TextWithSortButton text="Final" width="12%" onSort={onFinalSort}/>
+                <TextWithSortButton text="Average" width="12%" onSort={onAverageSort}/>
                 <Text width="11%" margin={2} fontWeight="semibold" alignItems="center">Status</Text>
             </Flex>
             <Button colorScheme='purple'
