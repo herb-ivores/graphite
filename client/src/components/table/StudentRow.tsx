@@ -49,21 +49,26 @@ function EditableStudentRowContent({student, onSave}: EditableStudentRowContentP
     const [midterm, setMidterm] = useState<number | undefined>(student?._midterm)
     const [final, setFinal] = useState<number | undefined>(student?._final)
 
+    const [lastNameEmpty, setLastNameEmpty] = useState(false)
+    const [firstNameEmpty, setFirstNameEmpty] = useState(false)
+
     return <>
-        <Flex width="40%" margin={4}>
+        <Flex width="40%" margin={4} alignItems="center" justifyContent="center">
             <Input
-                placeholder="Last Name"
+                isInvalid={firstNameEmpty}
+                placeholder={!firstNameEmpty ? "First name" : "First name required"}
                 width="50%"
                 marginEnd={2}
-                value={lastName}
-                onChange={newLastName => setLastName(newLastName.target.value)}
-            />
-            <Input
-                placeholder="First Name"
-                width="50%"
-                marginStart={2}
                 value={firstName}
                 onChange={newFirstName => setFirstName(newFirstName.target.value)}
+            />
+            <Input
+                isInvalid={lastNameEmpty}
+                placeholder={!lastNameEmpty ? "Last name" : "Last name required"}
+                width="50%"
+                marginStart={2}
+                value={lastName}
+                onChange={newLastName => setLastName(newLastName.target.value)}
             />
         </Flex>
         <NumberInput
@@ -129,9 +134,19 @@ function EditableStudentRowContent({student, onSave}: EditableStudentRowContentP
         </Flex>
         <Box width={12}>
             <Button variant="ghost" size="sm" onClick={() => {
-                const newStudent = new Student(lastName, firstName, prelim, midterm, final, student.id)
-                console.table(newStudent)
-                onSave(newStudent)
+                let hasError = false;
+                if (lastName.trim().length === 0) {
+                    setLastNameEmpty(true)
+                    hasError = true
+                }
+                if (firstName.trim().length === 0) {
+                    setFirstNameEmpty(true)
+                    hasError = true
+                }
+                if (!hasError) {
+                    const newStudent = new Student(lastName, firstName, prelim, midterm, final, student.id)
+                    onSave(newStudent)
+                }
             }}>
                 <CheckIcon color={colors.light.onPrimaryContainer}/>
             </Button>
@@ -156,7 +171,7 @@ export default function StudentRow(props: StudentRowProps) {
             _hover={{backgroundColor: colors.light.primaryContainer}}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={onSelect}
+            onClick={() => {if (!selected) {onSelect()}}}
             as="button"
         >
             <Box width={6}/>
