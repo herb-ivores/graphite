@@ -10,6 +10,7 @@ interface StudentTableProps extends FlexProps {
     students: Student[]
     selectedStudent?: Student,
     onSelectStudent: (student?: Student) => void,
+    onUpdateStudent: (student: Student) => void,
     onPrelimSort: () => void,
     onMidtermSort: () => void,
     onFinalSort: () => void,
@@ -59,6 +60,7 @@ export default function StudentTable(props: StudentTableProps) {
         students,
         selectedStudent,
         onSelectStudent,
+        onUpdateStudent,
         onPrelimSort,
         onMidtermSort,
         onFinalSort,
@@ -69,7 +71,7 @@ export default function StudentTable(props: StudentTableProps) {
         <Flex
             direction="column"
             backgroundColor="#FFFBFE"
-            borderTopStartRadius={20}
+            borderTopStartRadius={24}
             borderTopEndRadius={24}
             borderBottomEndRadius={0}
             borderBottomStartRadius={0}
@@ -101,6 +103,7 @@ export default function StudentTable(props: StudentTableProps) {
                         student={student}
                         selected={student.id == selectedStudent?.id}
                         onSelect={() => onSelectStudent(student)}
+                        onUpdateStudent={student => onUpdateStudent(student)}
                         backgroundColor={index % 2 ? `#FFFFFF00` : `#EADDFF33`}
                     />)
             })}

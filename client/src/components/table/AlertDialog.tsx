@@ -11,14 +11,14 @@ import React from "react";
 import {DeleteIcon} from "@chakra-ui/icons";
 import colors from "../../styles/Colors.ts";
 
-interface DeleteDialogProps{
-   studentName: string
+interface DeleteDialogProps {
+    studentName: string
 //    onDelete: ()=>void
 }
 
 
 function DeleteAlertDialog({studentName}: DeleteDialogProps) {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const {isOpen, onOpen, onClose} = useDisclosure()
     const cancelRef = React.useRef<HTMLInputElement>(null)
     // const handleDelete = () =>{
     //

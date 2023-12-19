@@ -3,8 +3,8 @@ import {Flex} from "@chakra-ui/react";
 import colors from "../styles/Colors.ts";
 import StudentTable from "../components/table/StudentTable.tsx";
 import {Student} from "../models/Student.ts";
+import {getStudents, updateStudent} from "../data/Database.ts";
 import {useEffect, useMemo, useState} from "react";
-import {getStudents} from "../data/Database.ts";
 import SortingType from "../components/enum/SortingType.ts";
 
 
@@ -81,6 +81,10 @@ export default function StudentsPage() {
                 students={studentsToShow}
                 selectedStudent={selectedStudent}
                 onSelectStudent={setSelectedStudent}
+                onUpdateStudent={student => {
+                    updateStudent(student).then(response => console.log(response))
+                    setSelectedStudent(undefined)
+                }}
             />
         </Flex>
     )

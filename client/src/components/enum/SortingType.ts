@@ -1,4 +1,3 @@
-
 enum SortingType {
     Midterm = "_midterm",
     Prelim = "_prelim",
