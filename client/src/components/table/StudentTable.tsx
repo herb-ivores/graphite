@@ -16,6 +16,10 @@ interface StudentTableProps extends FlexProps {
     onFinalSort: () => void,
     onAverageSort: () => void,
     onNameSort: () => void,
+    onFindByPrelim: () => void,
+    onFindByMidterm: () => void,
+    onFindByFinal: () => void,
+    onFindByAverage: () => void,
 }
 
 interface TextWithSortButtonProps{
@@ -76,6 +80,11 @@ export default function StudentTable(props: StudentTableProps) {
         onFinalSort,
         onAverageSort,
         onNameSort,
+        onFindByPrelim,
+        onFindByMidterm,
+        onFindByFinal,
+        onFindByAverage,
+
     } = props
     return (
         <Flex
@@ -90,10 +99,10 @@ export default function StudentTable(props: StudentTableProps) {
             <Flex>
                 <Box width={5}/>
                 <TextWithSortButton text="Student" width="40%" onSort={onNameSort} />
-                <TextWithSortButton text="Prelim" width="12%" onSort={onPrelimSort}/>
-                <TextWithSortButton text="Midterm" width="12%" onSort={onMidtermSort}/>
-                <TextWithSortButton text="Final" width="12%" onSort={onFinalSort}/>
-                <TextWithSortButton text="Average" width="12%" onSort={onAverageSort}/>
+                <TextWithSortButton text="Prelim" width="12%" onSort={onPrelimSort} onFind={onFindByPrelim}/>
+                <TextWithSortButton text="Midterm" width="12%" onSort={onMidtermSort} onFind={onFindByMidterm}/>
+                <TextWithSortButton text="Final" width="12%" onSort={onFinalSort} onFind={onFindByFinal}/>
+                <TextWithSortButton text="Average" width="12%" onSort={onAverageSort} onFind={onFindByAverage}/>
                 <Text width="11%" margin={2} fontWeight="semibold" alignItems="center">Status</Text>
             </Flex>
             <Button colorScheme='purple'

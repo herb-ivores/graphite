@@ -6,19 +6,44 @@ import {Student} from "../models/Student.ts";
 import {getStudents, updateStudent} from "../data/Database.ts";
 import {useEffect, useMemo, useState} from "react";
 import SortingType from "../components/enum/SortingType.ts";
+import QuerySymbol from "../components/enum/QuerySymbol.ts";
 
 
 export default function StudentsPage() {
     const [searchQuery, setSearchQuery] = useState("")
     const [sortType, setSortType] = useState<SortingType>(SortingType.Prelim)
+    const [grade, setGrade] = useState(0)
+    const [findGrade, setFindGrade] = useState<SortingType>(SortingType.Prelim)
+    const [querySymbol, setQuerySymbol] = useState<QuerySymbol>(QuerySymbol.Equal)
+    const [isFilterModalOpen, setFilterModalOpen] = useState(false);
     const [sortAscending, setSortAscending] = useState(true)
     const [sortingName, setSortingName] = useState(false)
+    const [applyFilter, setApplyFilter] = useState(false);
     const [students, setStudents] =
         useState<Student[]>([]);
+
+    const openFilterModal = (filterType: SortingType) => {
+        setFindGrade(filterType);
+        setFilterModalOpen(!isFilterModalOpen);
+        setApplyFilter(!applyFilter)
+    };
 
     const studentsToShow = useMemo(() => {
         return students.filter(student =>
             `${student.lastName}, ${student.firstName}`.toLowerCase().includes(searchQuery.toLowerCase()))
+            .filter(student => {
+                if(applyFilter){
+                    if(querySymbol === QuerySymbol.Equal) {
+                        return (student[findGrade] ?? 0) === grade;
+                    } else if(querySymbol === QuerySymbol.Greaterthan) {
+                        return (student[findGrade] ?? 0) < grade;
+                    } else if(querySymbol === QuerySymbol.LessThan) {
+                        return (student[findGrade] ?? 0) > grade;
+                    } else {
+                        return true;
+                    }
+                } else{ return true}
+            })
             .sort((a, b) => {
                 if (sortingName) {
                     return a.firstName.localeCompare(b.firstName);
@@ -29,7 +54,17 @@ export default function StudentsPage() {
                     return sortAscending ? aValue - bValue : bValue - aValue;
                 }
             });
-    }, [searchQuery, students, sortType,sortAscending, sortingName])
+    }, [
+        searchQuery,
+        students,
+        sortType,
+        sortAscending,
+        sortingName,
+        grade,
+        findGrade,
+        querySymbol,
+        isFilterModalOpen,
+        applyFilter])
 
     const [selectedStudent, setSelectedStudent] =
         useState<Student | undefined>(undefined)
@@ -50,11 +85,35 @@ export default function StudentsPage() {
             gap={4}
             background={colors.light.surfaceVariant}
         >
+
             <TopBar
                 query={searchQuery}
                 onQueryChange={setSearchQuery}
+                grade={grade}
+                onChangeGrade={(newGrade: number) => setGrade(newGrade)}
+                querySymbol={querySymbol}
+                onChangeQuerySymbol={(newQuery)=>setQuerySymbol(newQuery)}
+                filterVisibility={isFilterModalOpen}
+                onFilter={() => {
+                    setApplyFilter(false)
+                    setFilterModalOpen(!isFilterModalOpen)
+                }}
             />
+
             <StudentTable
+                onFindByPrelim={()=>{
+                    openFilterModal(SortingType.Prelim)
+
+                }}
+                onFindByMidterm={()=>{
+                    openFilterModal(SortingType.Midterm)
+                }}
+                onFindByFinal={()=>{
+                    openFilterModal(SortingType.Final)
+                }}
+                onFindByAverage={()=>{
+                    openFilterModal(SortingType.Average)
+                }}
                 onPrelimSort={()=> {
                     setSortingName(false)
                     setSortAscending(!sortAscending)
