@@ -13,16 +13,13 @@ import colors from "../../styles/Colors.ts";
 
 interface DeleteDialogProps {
     studentName: string
-//    onDelete: ()=>void
+    onDelete: () => void
 }
 
 
-function DeleteAlertDialog({studentName}: DeleteDialogProps) {
+function DeleteAlertDialog({studentName, onDelete}: DeleteDialogProps) {
     const {isOpen, onOpen, onClose} = useDisclosure()
     const cancelRef = React.useRef<HTMLInputElement>(null)
-    // const handleDelete = () =>{
-    //
-    // }
     return (
         <>
             <Button variant="ghost" size="sm" onClick={(event) => {
@@ -52,7 +49,10 @@ function DeleteAlertDialog({studentName}: DeleteDialogProps) {
                             <Button variant="ghost " onClick={onClose}>
                                 Cancel
                             </Button>
-                            <Button colorScheme='purple' onClick={onClose} ml={3}>
+                            <Button colorScheme='purple' onClick={() => {
+                                onDelete()
+                                onClose()
+                            }} ml={3}>
                                 Delete
                             </Button>
                         </AlertDialogFooter>

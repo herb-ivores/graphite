@@ -6,11 +6,12 @@ import {AddIcon, CheckIcon} from "@chakra-ui/icons";
 import AlertDialog from "./AlertDialog.tsx";
 
 interface StudentRowContentProps {
-    student: Student,
-    isHovered: boolean,
+    student: Student
+    isHovered: boolean
+    onDelete: () => void
 }
 
-function StudentRowContent({student, isHovered}: StudentRowContentProps) {
+function StudentRowContent({student, isHovered, onDelete}: StudentRowContentProps) {
     return <>
         <Text width="40%" margin={4} align="start">{`${student.firstName} ${student.lastName}`}</Text>
         <Text width="12%" margin={4} align="center">{student.prelim}</Text>
@@ -29,7 +30,7 @@ function StudentRowContent({student, isHovered}: StudentRowContentProps) {
         </Flex>
         <Box width={16}>
             {isHovered && (
-                <AlertDialog studentName={student.firstName}/>
+                <AlertDialog studentName={student.firstName} onDelete={onDelete}/>
             )}
         </Box>
     </>;
@@ -160,11 +161,12 @@ interface StudentRowProps extends FlexProps {
     student: Student,
     selected?: boolean,
     onSelect: () => void,
-    onUpdateStudent: (newStudent: Student) => void,
+    onUpdate: (newStudent: Student) => void,
+    onDelete: () => void
 }
 
 export default function StudentRow(props: StudentRowProps) {
-    const {student, selected, onSelect, onUpdateStudent} = props
+    const {student, selected, onSelect, onUpdate, onDelete} = props
     const [isHovered, setIsHovered] = useState(false);
 
     return (
@@ -182,8 +184,8 @@ export default function StudentRow(props: StudentRowProps) {
         >
             <Box width={6}/>
             {!selected ?
-                <StudentRowContent student={student} isHovered={isHovered}/> :
-                <EditableStudentRowContent student={student} onSave={onUpdateStudent}/>}
+                <StudentRowContent student={student} isHovered={isHovered} onDelete={onDelete}/> :
+                <EditableStudentRowContent student={student} onSave={onUpdate}/>}
             <Box width={6}/>
         </Flex>
     )

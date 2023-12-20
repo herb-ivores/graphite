@@ -2,9 +2,6 @@ import {Student} from "../../models/Student.ts";
 import {Box, Flex, FlexProps, ResponsiveValue, Text} from "@chakra-ui/react";
 import StudentRow, {EditableStudentRowContent} from "./StudentRow.tsx";
 import {Button} from '@chakra-ui/react'
-import {UpDownIcon} from '@chakra-ui/icons'
-import StudentRow from "./StudentRow.tsx";
-import { Button } from '@chakra-ui/react'
 import{UpDownIcon, HamburgerIcon} from '@chakra-ui/icons'
 import colors from "../../styles/Colors.ts";
 import {useState} from "react";
@@ -17,6 +14,7 @@ interface StudentTableProps extends FlexProps {
     selectedStudent?: Student
     onSelectStudent: (student?: Student) => void
     onUpdateStudent: (student: Student) => void
+    onDeleteStudent: (student: Student) => void
     onPrelimSort: () => void
     onMidtermSort: () => void
     onFinalSort: () => void
@@ -84,6 +82,7 @@ export default function StudentTable(props: StudentTableProps) {
         selectedStudent,
         onSelectStudent,
         onUpdateStudent,
+        onDeleteStudent,
         onPrelimSort,
         onMidtermSort,
         onFinalSort,
@@ -93,7 +92,6 @@ export default function StudentTable(props: StudentTableProps) {
         onFindByMidterm,
         onFindByFinal,
         onFindByAverage,
-
     } = props
     return (
         <Flex
@@ -136,7 +134,8 @@ export default function StudentTable(props: StudentTableProps) {
                         student={student}
                         selected={student.id == selectedStudent?.id}
                         onSelect={() => onSelectStudent(student)}
-                        onUpdateStudent={student => onUpdateStudent(student)}
+                        onUpdate={student => onUpdateStudent(student)}
+                        onDelete={() => onDeleteStudent(student)}
                         backgroundColor={index % 2 ? `#FFFFFF00` : `#EADDFF33`}
                     />)
             })}
