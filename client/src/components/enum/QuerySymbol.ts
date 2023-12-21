@@ -1,7 +1,9 @@
 enum QuerySymbol{
-    Greaterthan =">",
+    GreaterThan =">",
     LessThan = "<",
     Equal = "=",
+    GreaterOrEqualTo =">=",
+    LessOrEqualTo ="<=",
 }
 
 export default QuerySymbol
