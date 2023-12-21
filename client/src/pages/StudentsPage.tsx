@@ -36,9 +36,9 @@ export default function StudentsPage() {
                     if(querySymbol === QuerySymbol.Equal) {
                         return (student[findGrade] ?? 0) === grade;
                     } else if(querySymbol === QuerySymbol.GreaterThan) {
-                        return (student[findGrade] ?? 0) < grade;
-                    } else if(querySymbol === QuerySymbol.LessThan) {
                         return (student[findGrade] ?? 0) > grade;
+                    } else if(querySymbol === QuerySymbol.LessThan) {
+                        return (student[findGrade] ?? 0) < grade;
                     } else if(querySymbol == QuerySymbol.GreaterOrEqualTo){
                         return (student[findGrade] ?? 0) >= grade;
                     }else if(querySymbol == QuerySymbol.LessOrEqualTo){
