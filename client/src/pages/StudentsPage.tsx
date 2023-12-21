@@ -24,8 +24,8 @@ export default function StudentsPage() {
 
     const openFilterModal = (filterType: SortingType) => {
         setFindGrade(filterType);
-        setFilterModalOpen(!isFilterModalOpen);
-        setApplyFilter(!applyFilter)
+        setFilterModalOpen(true);
+        setApplyFilter(true)
     };
 
     const studentsToShow = useMemo(() => {
