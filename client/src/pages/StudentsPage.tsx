@@ -11,13 +11,13 @@ import QuerySymbol from "../components/enum/QuerySymbol.ts";
 
 export default function StudentsPage() {
     const [searchQuery, setSearchQuery] = useState("")
-    const [sortType, setSortType] = useState<SortingType>(SortingType.Prelim)
+    const [sortType, setSortType] = useState<SortingType | undefined>(undefined)
     const [grade, setGrade] = useState(0)
     const [findGrade, setFindGrade] = useState<SortingType>(SortingType.Prelim)
     const [querySymbol, setQuerySymbol] = useState<QuerySymbol>(QuerySymbol.Equal)
     const [isFilterModalOpen, setFilterModalOpen] = useState(false);
     const [sortAscending, setSortAscending] = useState(true)
-    const [sortingName, setSortingName] = useState(false)
+    const [sortingName, setSortingName] = useState(true)
     const [applyFilter, setApplyFilter] = useState(false);
     const [students, setStudents] =
         useState<Student[]>([]);
@@ -50,10 +50,11 @@ export default function StudentsPage() {
             })
             .sort((a, b) => {
                 if (sortingName) {
-                    return a.firstName.localeCompare(b.firstName);
+                    return sortAscending ? a.firstName.localeCompare(b.firstName) :
+                        b.firstName.localeCompare(a.firstName);
                 } else {
-                    const aValue = a[sortType] ?? 0;
-                    const bValue = b[sortType] ?? 0;
+                    const aValue = a[sortType ?? SortingType.Prelim] ?? 0;
+                    const bValue = b[sortType ?? SortingType.Prelim] ?? 0;
 
                     return sortAscending ? aValue - bValue : bValue - aValue;
                 }
@@ -98,7 +99,6 @@ export default function StudentsPage() {
             <StudentTable
                 onFindByPrelim={()=>{
                     openFilterModal(SortingType.Prelim)
-
                 }}
                 onFindByMidterm={()=>{
                     openFilterModal(SortingType.Midterm)
@@ -111,25 +111,28 @@ export default function StudentsPage() {
                 }}
                 onPrelimSort={()=> {
                     setSortingName(false)
-                    setSortAscending(!sortAscending)
+                    setSortAscending(sortType === SortingType.Prelim ? !sortAscending : true)
                     setSortType(SortingType.Prelim)
                 }}
                 onMidtermSort={()=> {
-                    setSortAscending(!sortAscending)
+                    setSortingName(false)
+                    setSortAscending(sortType === SortingType.Midterm ? !sortAscending : true)
                     setSortType(SortingType.Midterm)
                 }}
                 onFinalSort={()=>{
                     setSortingName(false)
-                    setSortAscending(!sortAscending)
+                    setSortAscending(sortType === SortingType.Final ? !sortAscending : true)
                     setSortType(SortingType.Final)
                 }}
                 onAverageSort={()=>{
                     setSortingName(false)
-                    setSortAscending(!sortAscending)
+                    setSortAscending(sortType === SortingType.Average ? !sortAscending : true)
                     setSortType(SortingType.Average)
                 }}
                 onNameSort={()=>{
-                    setSortingName(!sortingName)
+                    setSortingName(true)
+                    setSortAscending(sortingName ? !sortAscending : true)
+                    setSortType(undefined)
                 }}
                 flexGrow={1}
                 students={studentsToShow}
@@ -148,6 +151,9 @@ export default function StudentsPage() {
                 onDeleteStudent={student => {
                     deleteStudent(student).then(response => console.log(response))
                 }}
+                sortingName={sortingName}
+                sortingType={sortType}
+                sortAscending={sortAscending}
             />
         </Flex>
     )

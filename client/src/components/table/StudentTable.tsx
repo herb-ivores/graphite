@@ -1,10 +1,59 @@
 import {Student} from "../../models/Student.ts";
-import {Box, Flex, FlexProps, ResponsiveValue, Text} from "@chakra-ui/react";
+import {Box, Button, Flex, FlexProps, IconButton, ResponsiveValue, Text} from "@chakra-ui/react";
 import StudentRow, {EditableStudentRowContent} from "./StudentRow.tsx";
-import {Button} from '@chakra-ui/react'
-import{UpDownIcon, HamburgerIcon} from '@chakra-ui/icons'
-import colors from "../../styles/Colors.ts";
+import {ChevronDownIcon, ChevronUpIcon, SearchIcon, UpDownIcon} from '@chakra-ui/icons'
 import {useState} from "react";
+import SortingType from "../enum/SortingType.ts";
+
+interface TextWithSortButtonProps {
+    text: string
+    width: ResponsiveValue<string>
+    onSort?: () => void
+    onFind?: () => void
+    sortActive?: boolean
+    sortAscending?: boolean
+    showFindButton?: boolean
+}
+
+const TextWithSortButton = ({text, width, onSort, onFind, showFindButton, sortActive, sortAscending}: TextWithSortButtonProps) => {
+    const [isHoveringSort, setIsHoveringSort] = useState(false)
+    const [isHoveringFilter, setIsHoveringFilter] = useState(false)
+
+    return (
+        <Box
+            width={width}
+            margin={2}
+            fontWeight="semibold"
+            alignItems="center"
+        >
+            <Flex alignItems="center">
+                <Text>{text}</Text>
+                <IconButton
+                    aria-label="Sort"
+                    size="sm"
+                    variant="ghost"
+                    onClick={onSort}
+                    colorScheme="none"
+                    icon={!sortActive ? <UpDownIcon/> : sortAscending ? <ChevronDownIcon/> : <ChevronUpIcon/>}
+                    onMouseEnter={() => setIsHoveringSort(true)}
+                    onMouseLeave={() => setIsHoveringSort(false)}
+                    style={{opacity: (isHoveringSort || sortActive) ? 1 : 0.4}}
+                />
+                {showFindButton && <IconButton
+                    aria-label="Filter"
+                    size="sm"
+                    variant="ghost"
+                    onClick={onFind}
+                    colorScheme="none"
+                    icon={<SearchIcon/>}
+                    onMouseEnter={() => setIsHoveringFilter(true)}
+                    onMouseLeave={() => setIsHoveringFilter(false)}
+                    style={{opacity: isHoveringFilter ? 1 : 0.4}}
+                />}
+            </Flex>
+        </Box>
+    );
+}
 
 interface StudentTableProps extends FlexProps {
     students: Student[]
@@ -15,6 +64,9 @@ interface StudentTableProps extends FlexProps {
     onSelectStudent: (student?: Student) => void
     onUpdateStudent: (student: Student) => void
     onDeleteStudent: (student: Student) => void
+    sortingName: boolean
+    sortingType?: SortingType
+    sortAscending: boolean
     onPrelimSort: () => void
     onMidtermSort: () => void
     onFinalSort: () => void
@@ -24,53 +76,6 @@ interface StudentTableProps extends FlexProps {
     onFindByMidterm: () => void
     onFindByFinal: () => void
     onFindByAverage: () => void
-}
-
-interface TextWithSortButtonProps {
-    text: string
-    width: ResponsiveValue<string>
-    onSort?: () => void
-    onFind?: () => void
-}
-
-const TextWithSortButton = ({text, width, onSort, onFind}: TextWithSortButtonProps) => {
-
-    const [isHovered, setIsHovered] = useState(false);
-    return (
-        <Box
-            width={width}
-            margin={2}
-            fontWeight="semibold"
-            alignItems="center"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-        >
-            <Flex>
-                <Text>{text}</Text>
-                <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={onSort}
-                    colorScheme="none"
-                >
-                    <UpDownIcon
-                        visibility={isHovered ? "visible" : "hidden"}
-                        as="button"
-                        color={colors.light.onSurface}
-                    />
-                </Button>
-                <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={onFind}
-                    colorScheme="none"
-                >
-                    <HamburgerIcon  visibility={isHovered ? "visible" : "hidden"} as="button"/>
-                </Button>
-
-            </Flex>
-        </Box>
-    );
 }
 
 export default function StudentTable(props: StudentTableProps) {
@@ -83,6 +88,9 @@ export default function StudentTable(props: StudentTableProps) {
         onSelectStudent,
         onUpdateStudent,
         onDeleteStudent,
+        sortingName,
+        sortingType,
+        sortAscending,
         onPrelimSort,
         onMidtermSort,
         onFinalSort,
@@ -104,13 +112,51 @@ export default function StudentTable(props: StudentTableProps) {
             {...props}
         >
             <Flex>
-                <Box width={5}/>
-                <TextWithSortButton text="Student" width="40%" onSort={onNameSort} />
-                <TextWithSortButton text="Prelim" width="12%" onSort={onPrelimSort} onFind={onFindByPrelim}/>
-                <TextWithSortButton text="Midterm" width="12%" onSort={onMidtermSort} onFind={onFindByMidterm}/>
-                <TextWithSortButton text="Final" width="12%" onSort={onFinalSort} onFind={onFindByFinal}/>
-                <TextWithSortButton text="Average" width="12%" onSort={onAverageSort} onFind={onFindByAverage}/>
-                <Text width="11%" margin={2} fontWeight="semibold" alignItems="center">Status</Text>
+                <Box width={6}/>
+                <TextWithSortButton
+                    text="Student"
+                    width="40%"
+                    onSort={onNameSort}
+                    sortActive={sortingName}
+                    sortAscending={sortAscending}
+                />
+                <TextWithSortButton
+                    text="Prelim"
+                    width="12%"
+                    onSort={onPrelimSort}
+                    onFind={onFindByPrelim}
+                    showFindButton
+                    sortActive={sortingType == SortingType.Prelim}
+                    sortAscending={sortAscending}
+                />
+                <TextWithSortButton
+                    text="Midterm"
+                    width="12%"
+                    onSort={onMidtermSort}
+                    onFind={onFindByMidterm}
+                    showFindButton
+                    sortActive={sortingType == SortingType.Midterm}
+                    sortAscending={sortAscending}
+                />
+                <TextWithSortButton
+                    text="Final"
+                    width="12%"
+                    onSort={onFinalSort}
+                    onFind={onFindByFinal}
+                    showFindButton
+                    sortActive={sortingType == SortingType.Final}
+                    sortAscending={sortAscending}
+                />
+                <TextWithSortButton
+                    text="Average"
+                    width="12%"
+                    onSort={onAverageSort}
+                    onFind={onFindByAverage}
+                    showFindButton
+                    sortActive={sortingType == SortingType.Average}
+                    sortAscending={sortAscending}
+                />
+                <Flex width="11%" margin={2} fontWeight="semibold" alignItems="center">Status</Flex>
             </Flex>
             {!addingStudent ? (
                 <Button colorScheme='purple'
