@@ -1,4 +1,14 @@
-import {Button, Flex, FlexProps, Image, Input, InputGroup, Select, Text} from "@chakra-ui/react";
+import {
+    Button,
+    Flex,
+    FlexProps,
+    Image,
+    InputGroup,
+    NumberInput,
+    NumberInputField,
+    Select,
+    Text
+} from "@chakra-ui/react";
 import SearchBar from "./SearchBar.tsx";
 import {SmallCloseIcon} from '@chakra-ui/icons'
 
@@ -54,15 +64,21 @@ export default function TopBar(props: TopBarProps) {
                             ))}
                         </Select>
                     </InputGroup>
-                    <InputGroup size="lg" width="70%">
-                        <Input
-                            placeholder="Enter value"
-                            value={grade}
-                            onChange={(e) => {
-                                const parsedGrade = parseFloat(e.target.value)
+                    <NumberInput
+                        size="lg"
+                        width="70%"
+                        defaultValue={grade ?? ""}
+                        marginStart={2}
+                        step={0.01}
+                    >
+                        <NumberInputField
+                            placeholder="Midterm"
+                            textAlign="center"
+                            value={grade ?? ""}
+                            onChange={newGrade => {
+                                const parsedGrade = parseFloat(newGrade.target.value)
                                 onChangeGrade(isNaN(parsedGrade) ? undefined : parsedGrade)
                             }}
-                            marginStart={2}
                             backgroundColor="#FFFFFF"
                             _hover={{
                                 backgroundColor: "#FFFFFF"
@@ -72,8 +88,7 @@ export default function TopBar(props: TopBarProps) {
                             }}
                             borderRadius="full"
                         />
-                    </InputGroup>
-
+                    </NumberInput>
                     <Button variant="ghost" onClick={onCloseFilter}>
                         <SmallCloseIcon as="button"/>
                     </Button>
