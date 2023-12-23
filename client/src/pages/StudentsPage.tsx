@@ -12,41 +12,39 @@ import QuerySymbol from "../components/enum/QuerySymbol.ts";
 export default function StudentsPage() {
     const [searchQuery, setSearchQuery] = useState("")
     const [sortType, setSortType] = useState<SortingType | undefined>(undefined)
-    const [grade, setGrade] = useState(0)
-    const [findGrade, setFindGrade] = useState<SortingType>(SortingType.Prelim)
+    const [grade, setGrade] = useState<number | undefined>(undefined)
+    const [findingType, setFindingType] = useState<SortingType | undefined>(undefined)
     const [querySymbol, setQuerySymbol] = useState<QuerySymbol>(QuerySymbol.Equal)
-    const [isFilterModalOpen, setFilterModalOpen] = useState(false);
     const [sortAscending, setSortAscending] = useState(true)
     const [sortingName, setSortingName] = useState(true)
-    const [applyFilter, setApplyFilter] = useState(false);
     const [students, setStudents] =
         useState<Student[]>([]);
 
-    const openFilterModal = (filterType: SortingType) => {
-        setFindGrade(filterType);
-        setFilterModalOpen(true);
-        setApplyFilter(true)
-    };
+    function openFilterModal(filterType: SortingType) {
+        setFindingType(filterType === findingType ? undefined : filterType)
+    }
 
     const studentsToShow = useMemo(() => {
         return students.filter(student =>
             `${student.lastName}, ${student.firstName}`.toLowerCase().includes(searchQuery.toLowerCase()))
             .filter(student => {
-                if(applyFilter){
-                    if(querySymbol === QuerySymbol.Equal) {
-                        return (student[findGrade] ?? 0) === grade;
-                    } else if(querySymbol === QuerySymbol.GreaterThan) {
-                        return (student[findGrade] ?? 0) > grade;
-                    } else if(querySymbol === QuerySymbol.LessThan) {
-                        return (student[findGrade] ?? 0) < grade;
-                    } else if(querySymbol == QuerySymbol.GreaterOrEqualTo){
-                        return (student[findGrade] ?? 0) >= grade;
-                    }else if(querySymbol == QuerySymbol.LessOrEqualTo){
-                        return (student[findGrade] ?? 0) <= grade;
+                if (findingType !== undefined && grade !== undefined) {
+                    if (querySymbol === QuerySymbol.Equal) {
+                        return (student[findingType] ?? 0) === grade;
+                    } else if (querySymbol === QuerySymbol.GreaterThan) {
+                        return (student[findingType] ?? 0) > (grade);
+                    } else if (querySymbol === QuerySymbol.LessThan) {
+                        return (student[findingType] ?? 0) < grade;
+                    } else if (querySymbol == QuerySymbol.GreaterOrEqualTo) {
+                        return (student[findingType] ?? 0) >= grade;
+                    } else if (querySymbol == QuerySymbol.LessOrEqualTo) {
+                        return (student[findingType] ?? 0) <= grade;
                     } else {
                         return true;
                     }
-                } else{ return true}
+                } else {
+                    return true
+                }
             })
             .sort((a, b) => {
                 if (sortingName) {
@@ -59,7 +57,7 @@ export default function StudentsPage() {
                     return sortAscending ? aValue - bValue : bValue - aValue;
                 }
             });
-    }, [searchQuery, students, sortType, sortAscending, sortingName, grade, findGrade, querySymbol, applyFilter])
+    }, [searchQuery, students, sortType, sortAscending, sortingName, grade, findingType, querySymbol])
 
     const [addingStudent, setAddingStudent] = useState(false)
 
@@ -86,50 +84,50 @@ export default function StudentsPage() {
                 query={searchQuery}
                 onQueryChange={setSearchQuery}
                 grade={grade}
-                onChangeGrade={(newGrade: number) => setGrade(newGrade)}
+                onChangeGrade={(newGrade) => setGrade(newGrade)}
                 querySymbol={querySymbol}
-                onChangeQuerySymbol={(newQuery)=>setQuerySymbol(newQuery)}
-                filterVisibility={isFilterModalOpen}
-                onFilter={() => {
-                    setApplyFilter(false)
-                    setFilterModalOpen(!isFilterModalOpen)
+                onChangeQuerySymbol={(newQuery) => setQuerySymbol(newQuery)}
+                filterVisibility={findingType !== undefined}
+                onCloseFilter={() => {
+                    setFindingType(undefined)
+                    setGrade(undefined)
                 }}
             />
 
             <StudentTable
-                onFindByPrelim={()=>{
+                onFindByPrelim={() => {
                     openFilterModal(SortingType.Prelim)
                 }}
-                onFindByMidterm={()=>{
+                onFindByMidterm={() => {
                     openFilterModal(SortingType.Midterm)
                 }}
-                onFindByFinal={()=>{
+                onFindByFinal={() => {
                     openFilterModal(SortingType.Final)
                 }}
-                onFindByAverage={()=>{
+                onFindByAverage={() => {
                     openFilterModal(SortingType.Average)
                 }}
-                onPrelimSort={()=> {
+                onPrelimSort={() => {
                     setSortingName(false)
                     setSortAscending(sortType === SortingType.Prelim ? !sortAscending : true)
                     setSortType(SortingType.Prelim)
                 }}
-                onMidtermSort={()=> {
+                onMidtermSort={() => {
                     setSortingName(false)
                     setSortAscending(sortType === SortingType.Midterm ? !sortAscending : true)
                     setSortType(SortingType.Midterm)
                 }}
-                onFinalSort={()=>{
+                onFinalSort={() => {
                     setSortingName(false)
                     setSortAscending(sortType === SortingType.Final ? !sortAscending : true)
                     setSortType(SortingType.Final)
                 }}
-                onAverageSort={()=>{
+                onAverageSort={() => {
                     setSortingName(false)
                     setSortAscending(sortType === SortingType.Average ? !sortAscending : true)
                     setSortType(SortingType.Average)
                 }}
-                onNameSort={()=>{
+                onNameSort={() => {
                     setSortingName(true)
                     setSortAscending(sortingName ? !sortAscending : true)
                     setSortType(undefined)
@@ -154,6 +152,7 @@ export default function StudentsPage() {
                 sortingName={sortingName}
                 sortingType={sortType}
                 sortAscending={sortAscending}
+                findingType={findingType}
             />
         </Flex>
     )

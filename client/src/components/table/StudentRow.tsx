@@ -60,7 +60,10 @@ export function EditableStudentRowContent({student, onSave, adding}: EditableStu
                 width="50%"
                 marginEnd={2}
                 value={firstName}
-                onChange={newFirstName => setFirstName(newFirstName.target.value)}
+                onChange={newFirstName => {
+                    setFirstName(newFirstName.target.value)
+                    setFirstNameEmpty(false)
+                }}
             />
             <Input
                 isInvalid={lastNameEmpty}
@@ -68,7 +71,10 @@ export function EditableStudentRowContent({student, onSave, adding}: EditableStu
                 width="50%"
                 marginStart={2}
                 value={lastName}
-                onChange={newLastName => setLastName(newLastName.target.value)}
+                onChange={newLastName => {
+                    setLastName(newLastName.target.value)
+                    setLastNameEmpty(false)
+                }}
             />
         </Flex>
         <NumberInput
@@ -82,7 +88,7 @@ export function EditableStudentRowContent({student, onSave, adding}: EditableStu
                 textAlign="center"
                 value={prelim ?? ""}
                 onChange={newPrelim => {
-                    const parsedPrelim = parseInt(newPrelim.target.value)
+                    const parsedPrelim = parseFloat(newPrelim.target.value)
                     setPrelim(isNaN(parsedPrelim) ? undefined : parsedPrelim)
                 }}
             />
@@ -98,7 +104,7 @@ export function EditableStudentRowContent({student, onSave, adding}: EditableStu
                 textAlign="center"
                 value={midterm ?? ""}
                 onChange={newMidterm => {
-                    const parsedMidterm = parseInt(newMidterm.target.value)
+                    const parsedMidterm = parseFloat(newMidterm.target.value)
                     setMidterm(isNaN(parsedMidterm) ? undefined : parsedMidterm)
                 }}
             />
@@ -114,7 +120,7 @@ export function EditableStudentRowContent({student, onSave, adding}: EditableStu
                 textAlign="center"
                 value={final ?? ""}
                 onChange={newFinal => {
-                    const parsedFinal = parseInt(newFinal.target.value)
+                    const parsedFinal = parseFloat(newFinal.target.value)
                     setFinal(isNaN(parsedFinal) ? undefined : parsedFinal)
                 }}
             />

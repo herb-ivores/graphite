@@ -13,11 +13,22 @@ interface TextWithSortButtonProps {
     sortActive?: boolean
     sortAscending?: boolean
     showFindButton?: boolean
+    findActive?: boolean
 }
 
-const TextWithSortButton = ({text, width, onSort, onFind, showFindButton, sortActive, sortAscending}: TextWithSortButtonProps) => {
+function TextWithSortButton(
+    {
+        text,
+        width,
+        onSort,
+        onFind,
+        showFindButton,
+        sortActive,
+        sortAscending,
+        findActive,
+    }: TextWithSortButtonProps) {
     const [isHoveringSort, setIsHoveringSort] = useState(false)
-    const [isHoveringFilter, setIsHoveringFilter] = useState(false)
+    const [isHoveringFind, setIsHoveringFind] = useState(false)
 
     return (
         <Box
@@ -37,18 +48,18 @@ const TextWithSortButton = ({text, width, onSort, onFind, showFindButton, sortAc
                     icon={!sortActive ? <UpDownIcon/> : sortAscending ? <ChevronDownIcon/> : <ChevronUpIcon/>}
                     onMouseEnter={() => setIsHoveringSort(true)}
                     onMouseLeave={() => setIsHoveringSort(false)}
-                    style={{opacity: (isHoveringSort || sortActive) ? 1 : 0.4}}
+                    style={{opacity: (isHoveringSort || sortActive) ? 1 : 0.2}}
                 />
                 {showFindButton && <IconButton
-                    aria-label="Filter"
+                    aria-label="Find"
                     size="sm"
                     variant="ghost"
                     onClick={onFind}
                     colorScheme="none"
                     icon={<SearchIcon/>}
-                    onMouseEnter={() => setIsHoveringFilter(true)}
-                    onMouseLeave={() => setIsHoveringFilter(false)}
-                    style={{opacity: isHoveringFilter ? 1 : 0.4}}
+                    onMouseEnter={() => setIsHoveringFind(true)}
+                    onMouseLeave={() => setIsHoveringFind(false)}
+                    style={{opacity: (isHoveringFind || findActive) ? 1 : 0.2}}
                 />}
             </Flex>
         </Box>
@@ -72,6 +83,7 @@ interface StudentTableProps extends FlexProps {
     onFinalSort: () => void
     onAverageSort: () => void
     onNameSort: () => void
+    findingType?: SortingType
     onFindByPrelim: () => void
     onFindByMidterm: () => void
     onFindByFinal: () => void
@@ -96,6 +108,7 @@ export default function StudentTable(props: StudentTableProps) {
         onFinalSort,
         onAverageSort,
         onNameSort,
+        findingType,
         onFindByPrelim,
         onFindByMidterm,
         onFindByFinal,
@@ -128,6 +141,7 @@ export default function StudentTable(props: StudentTableProps) {
                     showFindButton
                     sortActive={sortingType == SortingType.Prelim}
                     sortAscending={sortAscending}
+                    findActive={findingType == SortingType.Prelim}
                 />
                 <TextWithSortButton
                     text="Midterm"
@@ -137,6 +151,7 @@ export default function StudentTable(props: StudentTableProps) {
                     showFindButton
                     sortActive={sortingType == SortingType.Midterm}
                     sortAscending={sortAscending}
+                    findActive={findingType == SortingType.Midterm}
                 />
                 <TextWithSortButton
                     text="Final"
@@ -146,6 +161,7 @@ export default function StudentTable(props: StudentTableProps) {
                     showFindButton
                     sortActive={sortingType == SortingType.Final}
                     sortAscending={sortAscending}
+                    findActive={findingType == SortingType.Final}
                 />
                 <TextWithSortButton
                     text="Average"
@@ -155,6 +171,7 @@ export default function StudentTable(props: StudentTableProps) {
                     showFindButton
                     sortActive={sortingType == SortingType.Average}
                     sortAscending={sortAscending}
+                    findActive={findingType == SortingType.Average}
                 />
                 <Flex width="11%" margin={2} fontWeight="semibold" alignItems="center">Status</Flex>
             </Flex>
