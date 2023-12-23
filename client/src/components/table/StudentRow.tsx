@@ -1,7 +1,7 @@
 import {Status, Student} from "../../models/Student.ts";
 import {Badge, Box, Button, Flex, FlexProps, Input, NumberInput, NumberInputField, Text} from "@chakra-ui/react";
 import colors from "../../styles/Colors.ts";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {AddIcon, CheckIcon} from "@chakra-ui/icons";
 import AlertDialog from "./AlertDialog.tsx";
 
@@ -48,6 +48,10 @@ export function EditableStudentRowContent({student, onSave, adding}: EditableStu
     const [prelim, setPrelim] = useState<number | undefined>(student?._prelim)
     const [midterm, setMidterm] = useState<number | undefined>(student?._midterm)
     const [final, setFinal] = useState<number | undefined>(student?._final)
+
+    const newStudent = useMemo(
+        () => new Student(lastName, firstName, prelim, midterm, final, student?.id),
+        [lastName, firstName, prelim, midterm, final, student?.id])
 
     const [lastNameEmpty, setLastNameEmpty] = useState(false)
     const [firstNameEmpty, setFirstNameEmpty] = useState(false)
@@ -132,11 +136,11 @@ export function EditableStudentRowContent({student, onSave, adding}: EditableStu
         <Flex width="12%" margin={4} fontWeight="semibold" alignItems="center" justifyContent="center">
             {student !== undefined ? (
                 <Badge
-                    backgroundColor={student.status == Status.Passed ? `#e8fee9` : `#ffe9ed`}
-                    color={student.status == Status.Passed ? `#008700` : `#c20007`}
+                    backgroundColor={newStudent.status == Status.Passed ? `#e8fee9` : `#ffe9ed`}
+                    color={newStudent.status == Status.Passed ? `#008700` : `#c20007`}
                     alignSelf="center"
                 >
-                    {student.status}
+                    {newStudent.status}
                 </Badge>
             ) : <></>}
         </Flex>
@@ -151,10 +155,7 @@ export function EditableStudentRowContent({student, onSave, adding}: EditableStu
                     setFirstNameEmpty(true)
                     hasError = true
                 }
-                if (!hasError) {
-                    const newStudent = new Student(lastName, firstName, prelim, midterm, final, student?.id)
-                    onSave(newStudent)
-                }
+                if (!hasError) {onSave(newStudent)}
             }}>
                 {adding ? <AddIcon color={colors.light.onPrimaryContainer}/> :
                     <CheckIcon color={colors.light.onPrimaryContainer}/>}

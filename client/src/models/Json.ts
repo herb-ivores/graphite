@@ -4,18 +4,18 @@ export type StudentJson = {
     id: number;
     last_name: string;
     first_name: string;
-    prelim?: string;
-    midterm?: string;
-    final?: string;
+    prelim?: string | null;
+    midterm?: string | null;
+    final?: string | null;
 }
 
 export function parse(studentJson: StudentJson){
     return new Student(
         studentJson.last_name,
         studentJson.first_name,
-        studentJson.prelim ? parseFloat(studentJson.prelim) : undefined,
-        studentJson.midterm ? parseFloat(studentJson.midterm) : undefined,
-        studentJson.final ? parseFloat(studentJson.final) : undefined,
+        studentJson.prelim != null ? parseFloat(studentJson.prelim) : undefined,
+        studentJson.midterm != null ? parseFloat(studentJson.midterm) : undefined,
+        studentJson.final != null ? parseFloat(studentJson.final) : undefined,
         studentJson.id,
     )
 }

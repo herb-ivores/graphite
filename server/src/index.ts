@@ -38,9 +38,9 @@ app.post("/students/add", jsonParser, (request, response) => {
     const values = [
         body.last_name,
         body.first_name,
-        body.prelim ? body.prelim : null,
-        body.midterm ? body.midterm : null,
-        body.final ? body.final : null,
+        body.prelim !== undefined ? body.prelim : null,
+        body.midterm !== undefined ? body.midterm : null,
+        body.final !== undefined ? body.final : null,
     ]
     connection.execute(query, values, (error, _) => {
         if (error) return response.json(error)
@@ -54,9 +54,9 @@ app.post("/students/update", jsonParser, (request, response) => {
     const values = [
         body.last_name,
         body.first_name,
-        body.prelim ? body.prelim : null,
-        body.midterm ? body.midterm : null,
-        body.final ? body.final : null,
+        body.prelim !== undefined ? body.prelim : null,
+        body.midterm !== undefined ? body.midterm : null,
+        body.final !== undefined ? body.final : null,
         body.id,
     ]
     connection.execute(query, values, (error, _) => {
